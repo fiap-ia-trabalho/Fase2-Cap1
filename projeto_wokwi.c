@@ -16,6 +16,13 @@ DHTesp dhtSensor;
 unsigned long ultimaLeituraUmid = 0;
 const unsigned long PERIODO_UMID_MS = 2000;
 float umidade = 0;
+String capital;
+
+// ------------------ Parâmetros ------------------
+bool bombaLigada = false;
+const float UMI_ON  = 40.0;
+const float UMI_OFF = 45.0;
+
 
 // ------------------ Logger: imprime apenas quando muda ------------------
 struct LogEntry {
@@ -118,9 +125,7 @@ void analisar_ph(){
 }
 
 // ------------------ Umidade ------------------
-bool bombaLigada = false;
-const float UMI_ON  = 40.0;
-const float UMI_OFF = 45.0;
+
 
 
 void analisar_umidade(){
@@ -148,12 +153,34 @@ void analisar_umidade(){
   }
 }
 
+String ler_linha_do_serial_bloqueante(const char* prompt) {
+  log_change("LOG_SETUP", prompt);
+  String linha = "";
+
+  while (Serial.available() > 0) Serial.read();
+
+  while (true) {
+    while (Serial.available() > 0) {
+      char c = Serial.read();
+      if (c == '\r') continue;
+      if (c == '\n') {
+        linha.trim();
+        if (linha.length() > 0) return linha;
+        log_change("LOG_SETUP", "Digite algo e pressione ENTER:");
+      } else {
+        linha += c;
+      }
+    }
+    delay(5);
+  }
+}
+
 // ------------------ Setup/Loop ------------------
 void setup(){
   Serial.begin(115200);
   delay(200);
-  log_change("BOOT", "FarmTech Solutions. ESP32 iniciado.");
-
+  log_change("BOOT", "FarmTech Solutions. ESP32 iniciado. Cultura utilizada (Café)");
+  
   pinMode(PIN_BOMBA, OUTPUT);
   digitalWrite(PIN_BOMBA, LOW);
 
@@ -163,6 +190,8 @@ void setup(){
   pinMode(BTN_PIN_N, INPUT);
 
   dhtSensor.setup(DHT_PIN, DHTesp::DHT22);
+
+  capital = ler_linha_do_serial_bloqueante("Qual a capital do cultivo? Digite e pressione ENTER:");
 }
 
 unsigned long ultimoPH = 0;
