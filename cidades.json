@@ -1,83 +1,86 @@
-[
-    {
-        "Rio Branco": 29.2
-    },
-    {
-        "Maceió": 82.6
-    },
-    {
-        "Macapá": 55.2
-    },
-    {
-        "Manaus": 49.6
-    },
-    {
-        "Salvador": 91.0
-    },
-    {
-        "Fortaleza": 45.2
-    },
-    {
-        "Brasília": 18.4
-    },
-    {
-        "Vitória": 78.2
-    },
-    {
-        "Goiânia": 14.8
-    },
-    {
-        "São Luís": 43.2
-    },
-    {
-        "Belo Horizonte": 25.6
-    },
-    {
-        "Campo Grande": 27.2
-    },
-    {
-        "Cuiabá": 18.8
-    },
-    {
-        "Belém": 33.2
-    },
-    {
-        "João Pessoa": 47.2
-    },
-    {
-        "Recife": 55.2
-    },
-    {
-        "Teresina": 44.4
-    },
-    {
-        "Curitiba": 98.8
-    },
-    {
-        "Rio de Janeiro": 97.6
-    },
-    {
-        "Natal": 45.2
-    },
-    {
-        "Porto Velho": 35.2
-    },
-    {
-        "Boa Vista": 61.6
-    },
-    {
-        "Porto Alegre": 31.6
-    },
-    {
-        "Florianópolis": 77.0
-    },
-    {
-        "Aracaju": 76.2
-    },
-    {
-        "São Paulo": 81.8
-    },
-    {
-        "Palmas": 71.0
-    }
-]
+{
+    "dados_cidades": [
+        {
+            "Rio Branco": 80.2
+        },
+        {
+            "Maceió": 61.6
+        },
+        {
+            "Macapá": 41.6
+        },
+        {
+            "Manaus": 33.2
+        },
+        {
+            "Salvador": 35.0
+        },
+        {
+            "Fortaleza": 29.6
+        },
+        {
+            "Brasília": 82.6
+        },
+        {
+            "Vitória": 78.2
+        },
+        {
+            "Goiânia": 72.6
+        },
+        {
+            "São Luís": 31.2
+        },
+        {
+            "Belo Horizonte": 37.6
+        },
+        {
+            "Campo Grande": 78.2
+        },
+        {
+            "Cuiabá": 26.0
+        },
+        {
+            "Belém": 31.2
+        },
+        {
+            "João Pessoa": 45.2
+        },
+        {
+            "Recife": 55.2
+        },
+        {
+            "Teresina": 17.2
+        },
+        {
+            "Curitiba": 48.8
+        },
+        {
+            "Rio de Janeiro": 67.8
+        },
+        {
+            "Natal": 55.2
+        },
+        {
+            "Porto Velho": 31.2
+        },
+        {
+            "Boa Vista": 36.8
+        },
+        {
+            "Porto Alegre": 26.4
+        },
+        {
+            "Florianópolis": 36.8
+        },
+        {
+            "Aracaju": 43.2
+        },
+        {
+            "São Paulo": 57.6
+        },
+        {
+            "Palmas": 71.0
+        }
+    ],
+    "publicacao": "2025-10-13T21:49:50.404743"
+}
