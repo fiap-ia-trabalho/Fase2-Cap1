@@ -1,4 +1,7 @@
 #include "DHTesp.h"
+#include <WiFi.h>
+#include <WiFiClientSecure.h>
+#include <HTTPClient.h>
 
 // ------------------ Pinos ------------------
 #define PIN_BOMBA   4
@@ -17,12 +20,20 @@ unsigned long ultimaLeituraUmid = 0;
 const unsigned long PERIODO_UMID_MS = 2000;
 float umidade = 0;
 String capital;
+float valor_cidade_api = 0;
 
 // ------------------ Parâmetros ------------------
 bool bombaLigada = false;
 const float UMI_ON  = 40.0;
 const float UMI_OFF = 45.0;
 
+// ---------- Wi-Fi / Cidades.json (OPCIONAL) ----------
+#define FEATURE_WIFI_FETCH 1           
+const char* WIFI_SSID = "Wokwi-GUEST";
+const char* WIFI_PASS = "";
+const char* CIDADES_URL = "https://raw.githubusercontent.com/fiap-ia-trabalho/Fase2-Cap1/refs/heads/main/cidades.json";
+float indiceCidade = NAN;
+bool  wifiConectado = false;
 
 // ------------------ Logger: imprime apenas quando muda ------------------
 struct LogEntry {
@@ -78,11 +89,9 @@ float mapFloat(float x, float in_min, float in_max, float out_min, float out_max
   return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
 
-// estados p/ evitar reimpressões
 enum class PHEstado { Adequado, Baixo, MedioAlto, Alto, Desconhecido };
 PHEstado phEstado = PHEstado::Desconhecido;
 
-// histerese leve para faixas
 void analisar_ph(){
   float valorLido = analogRead(LDR_PIN);
   float ph = mapFloat(valorLido, 0, ADC_MAX, 0.0, 14.0);
@@ -125,9 +134,6 @@ void analisar_ph(){
 }
 
 // ------------------ Umidade ------------------
-
-
-
 void analisar_umidade(){
   if (millis() - ultimaLeituraUmid < PERIODO_UMID_MS) return;
   ultimaLeituraUmid = millis();
@@ -140,7 +146,9 @@ void analisar_umidade(){
     return;
   }
 
-  if (!bombaLigada && umidade <= UMI_ON) {
+  if( valor_cidade_api >=  50){
+    log_change("UMID_STAT", String("Bomba não precisa ser ligada chance de chuva alto: ") + String(valor_cidade_api, 1));
+  } else if (!bombaLigada && umidade <= UMI_ON) {
     ligar_bomba(true);
     bombaLigada = true;
     log_change("UMID_STAT", String("Umidade baixa: ") + String(umidade, 1) + "%. Bomba ligada.");
@@ -175,6 +183,78 @@ String ler_linha_do_serial_bloqueante(const char* prompt) {
   }
 }
 
+// --------- Wi-Fi helpers ----------
+static bool conectar_wifi(uint32_t timeoutMs = 15000) {
+#if FEATURE_WIFI_FETCH
+  if (!WIFI_SSID || WIFI_SSID[0] == 0) { log_change("WIFI", "SSID vazio. Pulei Wi-Fi."); return false; }
+  WiFi.mode(WIFI_STA);
+  WiFi.begin(WIFI_SSID, WIFI_PASS);
+  uint32_t t0 = millis();
+  log_change("WIFI", "Conectando ao Wi-Fi...");
+  while (WiFi.status() != WL_CONNECTED && (millis() - t0) < timeoutMs) { delay(100); }
+  if (WiFi.status() == WL_CONNECTED) {
+    log_change("WIFI", String("Wi-Fi OK: ") + WiFi.localIP().toString());
+    return true;
+  }
+  log_change("WIFI", "Falha ao conectar Wi-Fi (timeout).");
+  return false;
+#else
+  (void)timeoutMs; return false;
+#endif
+}
+
+static bool baixar_cidades(String& payload) {
+#if FEATURE_WIFI_FETCH
+  if (WiFi.status() != WL_CONNECTED) return false;
+  WiFiClientSecure client;
+  client.setInsecure(); // evita precisar de certificado (apenas para testes)
+  HTTPClient http;
+  if (!http.begin(client, CIDADES_URL)) {
+    log_change("HTTP", "Falha ao iniciar HTTPClient.");
+    return false;
+  }
+  int code = http.GET();
+  if (code == 200) {
+    payload = http.getString();
+    http.end();
+    return true;
+  }
+  log_change("HTTP", String("GET falhou. Code: ") + code);
+  http.end();
+  return false;
+#else
+  (void)payload; return false;
+#endif
+}
+
+static bool extrair_indice_cidade(const String& json, const String& cidade, float& outVal) {
+  String key = String('"') + cidade + String('"');
+  int pos = json.indexOf(key);
+  if (pos < 0) return false;
+  int colon = json.indexOf(':', pos);
+  if (colon < 0) return false;
+
+  int i = colon + 1;
+  while (i < (int)json.length() && (json[i] == ' ' || json[i] == '\t')) i++;
+
+  int j = i;
+  while (j < (int)json.length() && json[j] != '}' && json[j] != ',') j++;
+
+  String num = json.substring(i, j);
+  num.trim();
+
+  if (num.length() == 0) return false;
+
+  bool temDigito = false;
+  for (size_t k = 0; k < num.length(); k++) {
+    if (isDigit(num[k])) { temDigito = true; break; }
+  }
+  if (!temDigito) return false;
+
+  outVal = num.toFloat();
+  return true;
+}
+
 // ------------------ Setup/Loop ------------------
 void setup(){
   Serial.begin(115200);
@@ -192,6 +272,27 @@ void setup(){
   dhtSensor.setup(DHT_PIN, DHTesp::DHT22);
 
   capital = ler_linha_do_serial_bloqueante("Qual a capital do cultivo? Digite e pressione ENTER:");
+
+  wifiConectado = conectar_wifi();
+  if (wifiConectado) {
+    String json;
+    if (baixar_cidades(json)) {
+      float val = NAN;
+      if (extrair_indice_cidade(json, capital, val)) {
+        valor_cidade_api = val;
+
+        log_change("CITY_IDX", String("Cidade '") + capital + "' encontrada. Valor = " + String(valor_cidade_api, 1));
+      } else {
+        log_change("CITY_IDX", String("Cidade '") + capital + "' não encontrada no JSON.");
+      }
+    } else {
+      log_change("HTTP", "Não foi possível baixar cidades.json.");
+    }
+    // Desliga Wi-Fi para liberar ADC2 (pino 14) e manter leituras estáveis
+    WiFi.disconnect(true);
+    WiFi.mode(WIFI_OFF);
+    log_change("WIFI", "Wi-Fi desligado após download único.");
+  }
 }
 
 unsigned long ultimoPH = 0;

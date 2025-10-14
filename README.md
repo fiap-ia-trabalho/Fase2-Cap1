@@ -28,11 +28,14 @@ Essa integração é fundamental para o sucesso da nossa startup FarmTech Soluti
 ## Diagrama de comunicação
 ![alt text](imagens/diagrama.png)
 
-## Esquema eletricos
-![alt text](imagens/image.png)
-
 ## Diagrama da API 
 ![alt text](image.png)
 
+## Esquema eletricos
+![alt text](imagens/image.png)
+
 ## Link Wokwi
-https://wokwi.com/projects/444116318159382529
+<a href="https://wokwi.com/projects/444116318159382529"> wokwi </href>
+
+## Link YouTube
+

@@ -1,13 +1,11 @@
 import requests
 import json
 import time
-import time
 from datetime import datetime
 
 # --- CONFIGURAÇÃO DA API ---
 # Use a sua chave da OpenWeatherMap
 API_KEY = "77b63a671563949ddd2ab6f5357fbb99" 
-UNIDADES = "metric" # Para temperatura em Celsius
 URL_BASE = "http://api.openweathermap.org/data/2.5/weather"
 
 # Vetor com as Capitais e suas respectivas latitudes e longitudes.
@@ -35,7 +33,7 @@ def buscar_clima_capital():
             print(f"Consultando clima para: {CIDADE_NOME} ({LATITUDE}, {LONGITUDE})")
             
             response = requests.get(URL_BASE, params=params)
-            response.raise_for_status() # Lança erro para status 4xx/5xx
+            response.raise_for_status()
             
             dados = response.json()
             
@@ -57,7 +55,7 @@ def buscar_clima_capital():
         except requests.exceptions.RequestException as e:
             print(f"❌ Erro de Conexão ou HTTP: {e}")
 
-        time.sleep(1)  # Aguardar 1 segundo entre as requisições para evitar limite de taxa
+        time.sleep(1)
 
 # Criar um arquivo JSON com os dados obtidos.
     datenow = datetime.now().isoformat()
