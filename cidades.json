@@ -1,86 +1,86 @@
 {
     "dados_cidades": [
         {
-            "Rio Branco": 52.0
+            "Rio Branco": 80.2
         },
         {
-            "Maceió": 69.4
+            "Maceió": 31.2
         },
         {
-            "Macapá": 46.0
+            "Macapá": 38.0
         },
         {
-            "Manaus": 50.0
+            "Manaus": 45.2
         },
         {
-            "Salvador": 64.8
+            "Salvador": 38.4
         },
         {
-            "Fortaleza": 30.0
+            "Fortaleza": 39.6
         },
         {
-            "Brasília": 42.4
+            "Brasília": 59.2
         },
         {
             "Vitória": 91.2
         },
         {
-            "Goiânia": 59.0
+            "Goiânia": 67.8
         },
         {
-            "São Luís": 31.2
+            "São Luís": 29.6
         },
         {
-            "Belo Horizonte": 46.0
+            "Belo Horizonte": 62.4
         },
         {
-            "Campo Grande": 17.2
+            "Campo Grande": 32.4
         },
         {
-            "Cuiabá": 42.4
+            "Cuiabá": 26.0
         },
         {
-            "Belém": 46.0
+            "Belém": 26.0
         },
         {
-            "João Pessoa": 44.4
+            "João Pessoa": 78.2
         },
         {
-            "Recife": 48.4
+            "Recife": 41.2
         },
         {
-            "Teresina": 24.0
+            "Teresina": 13.2
         },
         {
-            "Curitiba": 20.0
+            "Curitiba": 35.6
         },
         {
-            "Rio de Janeiro": 73.8
+            "Rio de Janeiro": 93.2
         },
         {
-            "Natal": 69.8
+            "Natal": 45.2
         },
         {
-            "Porto Velho": 52.0
+            "Porto Velho": 41.2
         },
         {
-            "Boa Vista": 78.2
+            "Boa Vista": 43.2
         },
         {
-            "Porto Alegre": 19.2
+            "Porto Alegre": 31.6
         },
         {
-            "Florianópolis": 38.4
+            "Florianópolis": 56.0
         },
         {
-            "Aracaju": 50.0
+            "Aracaju": 39.6
         },
         {
-            "São Paulo": 53.6
+            "São Paulo": 81.0
         },
         {
-            "Palmas": 43.2
+            "Palmas": 50.0
         }
     ],
-    "publicacao": "2025-10-15T12:54:36.111793"
+    "publicacao": "2025-10-15T20:10:13.655589"
 }
