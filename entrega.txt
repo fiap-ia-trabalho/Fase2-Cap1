@@ -1,0 +1,4 @@
+github: https://github.com/fiap-ia-trabalho/Fase2-Cap1
+Wokwi: https://wokwi.com/projects/444116318159382529
+You Tube: https://youtu.be/jOTzoWmYtbs
+Codigo C++: https://github.com/fiap-ia-trabalho/Fase2-Cap1/blob/main/projeto_wokwi.c
