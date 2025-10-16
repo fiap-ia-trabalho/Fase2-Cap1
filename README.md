@@ -35,7 +35,9 @@ Essa integração é fundamental para o sucesso da nossa startup FarmTech Soluti
 ![alt text](imagens/image.png)
 
 ## Link Wokwi
-<a href="https://wokwi.com/projects/444116318159382529"> wokwi </href>
+<a href="https://wokwi.com/projects/444116318159382529"> Wokwi </a>
 
 ## Link YouTube
+
+<a href="https://youtu.be/jOTzoWmYtbs"> You tube - Projeto</a>
 
